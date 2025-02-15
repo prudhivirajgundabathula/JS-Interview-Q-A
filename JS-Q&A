@@ -478,28 +478,141 @@ button.addEventListener('click', handleClick);
 // Later in your code, you can remove the event listener
 button.removeEventListener('click', handleClick);
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1. forEach Loop : The forEach loop is a method that executes a provided function once for each array element. It is often used to iterate over arrays when you don't need to mutate the array or obtain specific index values.  Example: 
-let fruits = ['apple', 'banana', 'mango']; 
-fruits.forEach(function(fruit, index) { 
-  console.log(index + ': ' + fruit);
+1️⃣ for...in Loop
+🔹 What is it?
+The for...in loop iterates over the keys (property names) of an object or the indices of an array.
+✅ Example 1: Iterating Over an Object
+const person = { name: "John", age: 30, city: "New York" };
+for (let key in person) {
+    console.log(`${key}: ${person[key]}`);
+}
+🔹 Output:
+name: John
+age: 30
+city: New York
+✅ Example 2: Iterating Over an Array
+const fruits = ["Apple", "Banana", "Cherry"];
+for (let index in fruits) {
+    console.log(`${index}: ${fruits[index]}`);
+}
+🔹 Output:
+0: Apple
+1: Banana
+2: Cherry
+When to Use for...in?
+✔ Use for...in when you want to iterate over object properties or array indices (not values).
+❌ Avoid using it for arrays if you only care about values (use for...of or forEach instead).
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2️⃣ for...of Loop
+🔹 What is it?
+The for...of loop iterates over the values of an iterable object, such as arrays, strings, maps, or sets.
+✅ Example 1: Iterating Over an Array
+const fruits = ["Apple", "Banana", "Cherry"];
+for (let fruit of fruits) {
+    console.log(fruit);
+}
+🔹 Output:
+Apple
+Banana
+Cherry
+✅ Example 2: Iterating Over a String
+const word = "Hello";
+for (let char of word) {
+    console.log(char);
+}
+🔹 Output:
+H
+e
+l
+l
+o
+✅ Example 3: Iterating Over a Map
+const userMap = new Map();
+userMap.set("name", "Alice");
+userMap.set("age", 25);
+for (let [key, value] of userMap) {
+    console.log(`${key}: ${value}`);
+}
+🔹 Output:
+name: Alice
+age: 25
+When to Use for...of?
+✔ Use for...of when you need to iterate over the values of an array, string, or any iterable (like maps and sets).
+❌ Cannot be used with objects directly because objects are not iterable.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3️⃣ forEach Loop
+🔹 What is it?
+The forEach method executes a function for each element of an array.
+✅ Example: Using forEach with an Array
+const fruits = ["Apple", "Banana", "Cherry"];
+fruits.forEach((fruit, index) => {
+    console.log(`${index}: ${fruit}`);
 });
-// Outputs: // 0: apple // 1: banana // 2: mango
+🔹 Output:
+0: Apple
+1: Banana
+2: Cherry
+✅ Example: Modifying Array Elements
+javascript
+Copy
+Edit
+let numbers = [1, 2, 3];
+numbers.forEach((num, index, arr) => {
+    arr[index] = num * 2; // Modify the array
+});
+console.log(numbers); // [2, 4, 6]
+When to Use forEach?
+✔ Use forEach when working specifically with arrays and you want to execute a function for each element.
+✔ Great for modifying arrays or performing side effects.
+❌ Cannot break out of the loop (use for or for...of instead if you need early exit).
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-2. for...in Loop : The for...in loop iterates over the enumerable properties of an object (including array indices). It’s primarily used for objects, but can be used with arrays as well, though not recommended because it may iterate over properties not intended for consideration.
-Example: javascript
-let car = { make: 'Toyota', model: 'Corolla', year: 2021 };
-for (let key in car) {
-  console.log(key + ': ' + car[key]);
+When to Use Each Loop
+Choose for...in When: You want to iterate over object properties.
+Example: Access property names and their values in an object.
+Choose for...of When: You want to iterate over the values of an array, string, or iterable (like Map or Set).
+Example: Iterating through a list of array elements.
+Choose forEach When: You are working with arrays only.
+You want to perform a specific action for each element without needing to break out of the loop.
+Practical Example: Comparing All Three Loops
+javascript
+Copy
+Edit
+const fruits = ["Apple", "Banana", "Cherry"];
+const fruitObj = { 0: "Apple", 1: "Banana", 2: "Cherry" };
+
+// Using for...in
+console.log("Using for...in:");
+for (let key in fruits) {
+    console.log(`Index: ${key}, Value: ${fruits[key]}`);
 }
-// Outputs: // make: Toyota // model: Corolla // year: 2021 
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-3. for...of Loop : The for...of loop iterates over the values of iterable objects like arrays, strings, and other objects that implement the iterable protocol. It is best suited for arrays or array-like objects.
-Example: javascript
-let colors = ['red', 'green', 'blue'];
-for (let color of colors) { 
-console.log(color);
+
+// Using for...of
+console.log("\nUsing for...of:");
+for (let fruit of fruits) {
+    console.log(fruit);
 }
-// Outputs: // red // green // blue 
+
+// Using forEach
+console.log("\nUsing forEach:");
+fruits.forEach((fruit, index) => {
+    console.log(`Index: ${index}, Value: ${fruit}`);
+});
+🔹 Output:
+Using for...in:
+Index: 0, Value: Apple
+Index: 1, Value: Banana
+Index: 2, Value: Cherry
+
+Using for...of:
+Apple
+Banana
+Cherry
+
+Using forEach:
+Index: 0, Value: Apple
+Index: 1, Value: Banana
+Index: 2, Value: Cherry
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4. break Statement : The break statement is used to exit a loop or a switch statement prematurely based on a specific condition.
 Example:javascript
