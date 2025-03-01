@@ -148,6 +148,25 @@ Less Than or Equal To (<=): Checks if the left operand is less than or equal to 
 4.LOGICAL OPERATORS : Logical operators are used to combine or invert boolean values. 
 AND (&&): Returns true if both operands are true. : true && false; // false
 OR (||): Returns true if at least one of the operands is true.  : true || false; // true
+console.log(false || null || "hello");
+console.log(false && null && "hello");
+Let's break down these JavaScript expressions step by step:
+1️⃣ Expression: console.log(false || null || "hello");
+Operator Used: || (Logical OR)
+The OR (||) operator returns the first truthy value it encounters.
+If all values are falsy, it returns the last falsy value.
+Step-by-Step Evaluation:
+false || null → null (since false is falsy, it moves to null).
+null || "hello" → "hello" (since null is falsy, it returns "hello").
+Final Output: // "hello"
+2️⃣ Expression: console.log(false && null && "hello");
+Operator Used: && (Logical AND)
+The AND (&&) operator returns the first falsy value it encounters.
+If all values are truthy, it returns the last truthy value.
+Step-by-Step Evaluation:
+false && null → false (since false is falsy, it stops evaluating).
+The rest of the expression is ignored because && short-circuits when a falsy value is found.
+Final Output: // false
 NOT (!): Inverts the boolean value.  : !true; // false 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 5.BITWISE OPERATORS: Bitwise operators perform bit-level operations on operands.
