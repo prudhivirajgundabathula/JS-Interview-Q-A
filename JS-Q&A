@@ -119,6 +119,7 @@ BITWISE OPERATORS  : AND (&), OR (|), XOR (^), NOT (~), Left Shift (<<), Right S
 TERNARY OPERATOR : Conditional (? :True : False)
 RELATIONAL OPERATORS : in, instanceof
 OTHER OPERATORS : Increment (++), Decrement (--), Comma (,), Delete (delete)
+UNARY OPERATOR  : A unary operator is an operator that operates on only one operand. In JavaScript, the most common unary operators are the unary plus (+) and unary negation (-) operators. They can convert a value to a number and negate a value, respectively.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 1. ARITHMETIC OPERATORS : Arithmetic operators are used to perform basic mathematical operations.
 Addition (+): Adds two operands. // : let sum = 5 + 3; // Outputs: 8
@@ -199,6 +200,30 @@ RELATIONAL OPERATORS : Relational operators compare the relationship between two
 in: Checks if a property exists in an object. EXAMPLE : 'length' in 'hello'; // true
 instanceof: Checks if an object is an instance of a particular class or constructor function. Example : let today = new Date();   console.log(today instanceof Date); // true 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+9. UNARY OPERATOR ?
+A unary operator is an operator that operates on only one operand. In JavaScript, the most common unary operators are the unary plus (+) and unary negation (-) operators. They can convert a value to a number and negate a value, respectively.
+Here's a quick rundown:
+Unary Plus (+): Converts its operand to a number.
+let x = "5";
+console.log(+x); // Output: 5 (as a number)
+Unary Negation (-): Converts its operand to a number and negates it.
+let y = "5";
+console.log(-y); // Output: -5 (as a number)
+There are other unary operators as well, such as typeof, delete, and void. If you want to explore these further or have more specific questions, let me know!
+----------------------------------------------------------------------------------------------------------------------------------------        
+How do unary operators differ from binary operators?
+Unary Operators: Operate on a single operand.
+Examples include + (unary plus), - (unary negation), ++ (increment), -- (decrement), typeof, delete, and void.
+let x = 5;
+console.log(-x); // Output: -5 (Unary negation)
+Binary Operators:
+Operate on two operands.
+Examples include arithmetic operators (+, -, *, /, %), comparison operators (==, !=, ===, !==, >, <, >=, <=), logical operators (&&, ||), and assignment operators (=, +=, -=).
+let a = 10;
+let b = 2;
+console.log(a + b); // Output: 12 (Addition)
+In summary, unary operators take a single operand and perform a specific operation, while binary operators require two operands and perform an operation between them. 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 1. What is an array in JavaScript?
 Answer: An array in JavaScript is a data structure used to store multiple values in a single variable. It allows you to store elements of different data types, such as numbers, strings, objects, or even other arrays (nested arrays). Arrays are indexed, with the first element at index 0.
 let fruits = ["apple", "banana", "cherry"];
