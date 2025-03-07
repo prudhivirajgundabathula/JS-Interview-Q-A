@@ -209,7 +209,14 @@ console.log(+x); // Output: 5 (as a number)
 Unary Negation (-): Converts its operand to a number and negates it.
 let y = "5";
 console.log(-y); // Output: -5 (as a number)
-There are other unary operators as well, such as typeof, delete, and void. If you want to explore these further or have more specific questions, let me know!
+example ....  
+console.log(+true); // +true → 1
+console.log(+false); // +false → 0
+console.log(-true); //  -true → -1
+console.log(+'123'); // +'123' → 123
+console.log(+null); // +null → 0
+console.log(+undefined) // +undefined → NaN
+console.log(true) // true → true
 ----------------------------------------------------------------------------------------------------------------------------------------        
 How do unary operators differ from binary operators?
 Unary Operators: Operate on a single operand.
