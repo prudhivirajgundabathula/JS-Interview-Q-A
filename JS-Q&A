@@ -188,6 +188,31 @@ console.log('year' in car); // false
 Example with Arrays: let fruits = ['apple', 'banana', 'mango'];
 console.log(0 in fruits); // true (index 0 exists)
 console.log(3 in fruits); // false (index 3 does not exist)
+const arr = [1, 2, 3, 4];
+console.log(1 in arr);
+console.log(2 in arr);
+console.log(4 in arr);
+Explanation of the in Operator:
+In JavaScript, the in operator checks whether a property (or index) exists in an object or array.
+For arrays, it checks if the specified index exists (not the value).
+The arr in this case has 4 elements: arr[0] = 1, arr[1] = 2, arr[2] = 3, and arr[3] = 4.
+Results of Each Check:
+1 in arr:
+This checks if the index 1 exists in the array arr.
+The array does have an element at index 1 (value: 2).
+Output: true
+2 in arr:
+This checks if the index 2 exists in the array arr.
+The array does have an element at index 2 (value: 3).
+Output: true
+4 in arr:
+This checks if the index 4 exists in the array arr.
+The array has 4 elements, so the valid indices are 0, 1, 2, and 3. Index 4 does not exist.
+Output: false
+Final Output: 
+true
+true
+false
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 8. OTHER USEFUL OPERATORS : Increment/Decrement Operators :These operators are used to increase or decrease the value of a variable by one.
 Increment (++): Adds one to the operand. let x = 5; x++; // x becomes 6, ++x; // x becomes 7
