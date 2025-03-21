@@ -4105,3 +4105,108 @@ Instead of "Fast Response Time", use "API response time should be < 500ms".
 Imagine you're developing an e-commerce website:
 Functional Requirement: "Users should be able to add products to the cart."
 Non-Functional Requirement: "The system should handle 5,000 orders per second without crashing."
+----------------------------------------------------------------------------------------------------------------------------------------------------
+web rtc ?
+WebRTC (Web Real-Time Communication) is an open-source technology that enables real-time communication directly between web browsers and mobile applications. It allows for audio, video, and data sharing without requiring additional plugins or software. Here's a quick overview:
+Key Features of WebRTC
+Peer-to-Peer Communication: WebRTC establishes direct connections between devices, reducing latency and improving performance.
+Media Streaming: It supports high-quality audio and video streaming, making it ideal for video conferencing, live broadcasting, and online meetings.
+Data Sharing: WebRTC allows for the transfer of arbitrary data (e.g., files, messages) between peers.
+Cross-Platform Support: It works on all modern browsers (e.g., Chrome, Firefox, Safari) and has libraries for native mobile apps (Android and iOS).
+How It Works
+A typical WebRTC application involves:
+Accessing Media Devices: WebRTC can access a user's camera and microphone using JavaScript APIs.
+Establishing Peer Connections: It uses signaling protocols (e.g., WebSocket, SIP) to exchange connection details between peers.
+Streaming Media/Data: Once the connection is established, media and data are streamed directly between peers.
+Use Cases
+Video conferencing (e.g., Zoom, Google Meet)
+Live streaming and broadcasting
+Multiplayer gaming
+File sharing
+E-learning platforms
+coding example
+Here's a simple example of implementing WebRTC for creating a basic peer-to-peer connection that allows real-time video streaming between two users.
+Client-side Code Example
+This example demonstrates the use of WebRTC APIs, such as getUserMedia() and RTCPeerConnection, for peer-to-peer video communication.
+html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebRTC Example</title>
+</head>
+<body>
+    <h2>WebRTC Peer-to-Peer Video</h2>
+    <video id="localVideo" autoplay playsinline muted></video>
+    <video id="remoteVideo" autoplay playsinline></video>
+    <button id="start">Start Video</button>
+    <button id="call">Call</button>
+    <button id="answer">Answer</button>
+
+    <script>
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        let localStream;
+        let peerConnection;
+
+        // STUN server configuration for establishing a peer connection
+        const config = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' } // Public STUN server
+            ]
+        };
+
+        // Get access to the local camera and microphone
+        document.getElementById('start').onclick = async () => {
+            localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            localVideo.srcObject = localStream;
+        };
+
+        // Create a new peer connection and add the local stream
+        document.getElementById('call').onclick = async () => {
+            peerConnection = new RTCPeerConnection(config);
+            localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
+
+            // Send ICE candidates to the remote peer
+            peerConnection.onicecandidate = event => {
+                if (event.candidate) {
+                    console.log('ICE Candidate:', event.candidate);
+                    // You'd send this candidate to the remote peer through signaling
+                }
+            };
+
+            // Receive remote stream
+            peerConnection.ontrack = event => {
+                remoteVideo.srcObject = event.streams[0];
+            };
+
+            // Create an offer
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+            console.log('Offer:', offer);
+            // You'd send the offer to the remote peer through signaling
+        };
+
+        // Answer the call when an offer is received
+        document.getElementById('answer').onclick = async () => {
+            // Assume you received the offer through signaling
+            const remoteOffer = /* Insert the received offer here */;
+            await peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOffer));
+
+            const answer = await peerConnection.createAnswer();
+            await peerConnection.setLocalDescription(answer);
+            console.log('Answer:', answer);
+            // You'd send the answer to the remote peer through signaling
+        };
+    </script>
+</body>
+</html>
+How This Works
+Start Video: The getUserMedia() API accesses the user's camera and microphone, displaying it in the local video element.
+Create Peer Connection:The RTCPeerConnection is configured to handle signaling and streaming.
+ICE (Interactive Connectivity Establishment) candidates are collected for establishing a connection.
+Offer & Answer: The createOffer() method generates an SDP (Session Description Protocol) offer to initiate the connection.
+The createAnswer() method generates an SDP answer to accept the connection.
+Next Steps
+To make this work:
+You need a signaling server (e.g., WebSocket) for exchanging ICE candidates, offers, and answers between peers.
+Enhance error handling for a production-ready app.
