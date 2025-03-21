@@ -4210,3 +4210,140 @@ Next Steps
 To make this work:
 You need a signaling server (e.g., WebSocket) for exchanging ICE candidates, offers, and answers between peers.
 Enhance error handling for a production-ready app.
+------------------------------------------------------------------------------------------------------------------------------------------------
+What Are Webhooks?
+Webhooks are a way for applications to send real-time data to other systems or applications when certain events occur. Instead of polling for updates, webhooks allow one application to notify another application via an HTTP request.
+For example:
+A payment gateway (like Stripe) can notify your app when a payment is processed.
+GitHub can notify your app when there’s a new commit in a repository.
+How Webhooks Work
+An application (the provider) allows you to register a callback URL (a URL on your server).
+When an event occurs, the provider makes an HTTP POST request to your callback URL with the event's data (usually in JSON format).
+Your server handles the data and processes it accordingly.
+Small Coding Example: Webhook Listener
+Here’s a basic example of setting up a webhook listener in Node.js using Express.
+Code Example
+javascript
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// Middleware to parse JSON payloads
+app.use(express.json());
+
+// Webhook endpoint (callback URL)
+app.post('/webhook', (req, res) => {
+    // Log the incoming event data
+    console.log('Webhook event received:', req.body);
+
+    // Process the event data (e.g., update a database or trigger a workflow)
+    if (req.body.event === 'payment_success') {
+        console.log(`Payment successful for user: ${req.body.userId}`);
+    }
+
+    // Send a response back to the provider
+    res.status(200).send('Event received successfully');
+});
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Webhook listener running on http://localhost:${PORT}`);
+});
+Explanation of the Code
+Webhook Endpoint:
+POST /webhook is the endpoint where the provider sends data.
+You parse the incoming JSON payload using express.json().
+Processing the Event:
+The event data (req.body) contains details about the event. For example, a payment gateway might send:
+
+json
+{
+  "event": "payment_success",
+  "userId": "12345",
+  "amount": "100.00"
+}
+You can process the event data (e.g., log it, update a database, etc.).
+Acknowledging the Event:
+Sending a 200 OK response tells the provider that the event has been received successfully.
+Testing Your Webhook
+To test the webhook locally, you can use tools like:
+ngrok: Expose your local server to the internet by creating a public URL.
+bash
+ngrok http 3000
+Register the ngrok URL as the webhook callback URL with the provider.
+---------------------------------------------------------------------------------------------------------------------------------------------------
+What Are WebSockets?
+WebSockets provide a way to establish a full-duplex communication channel between the client (e.g., browser) and the server. Unlike traditional HTTP, which is request-response based, WebSockets allow for persistent connections where both the client and server can send data to each other anytime.
+This is ideal for real-time applications like chat apps, live notifications, stock price updates, gaming, etc.
+Key Features of WebSockets:
+Persistent connection after the initial handshake.
+Full-duplex communication (data can flow in both directions simultaneously).
+Lower latency compared to polling techniques.
+Lightweight messaging protocol.
+Small WebSocket Example in Node.js
+Here’s a simple example of implementing WebSocket communication using the WebSocket library in Node.js..
+Server-Side Code
+javascript
+const WebSocket = require('ws');
+// Create a WebSocket server on port 8080
+const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    console.log('A new client connected!');
+    // Send a message to the client
+    ws.send('Welcome to the WebSocket server!');
+    // Listen for messages from the client
+    ws.on('message', (message) => {
+        console.log(`Received: ${message}`);
+        ws.send(`You said: ${message}`);
+    });
+    // Handle client disconnect
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+});
+console.log('WebSocket server is running on ws://localhost:8080');
+
+Client-Side Code (HTML + JavaScript)
+html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Client</title>
+</head>
+<body>
+    <h2>WebSocket Client Example</h2>
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Type a message">
+    <button id="sendButton">Send</button>
+    <script>
+        // Connect to the WebSocket server
+        const socket = new WebSocket('ws://localhost:8080');
+        // Display messages from the server
+        socket.onmessage = (event) => {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML += `<p>Server: ${event.data}</p>`;
+        };
+        // Send a message to the server
+        document.getElementById('sendButton').onclick = () => {
+            const input = document.getElementById('messageInput');
+            socket.send(input.value);
+            input.value = ''; // Clear input field
+        };
+    </script>
+</body>
+</html>
+How It Works:
+Server Setup:
+The WebSocket server listens for incoming client connections on port 8080.
+Once a connection is established, it can both send and receive messages.
+Client Interaction:
+The client connects to the server via the WebSocket URL (ws://localhost:8080).
+When the client sends a message, the server responds with the same message prefixed with You said:.
+Example Output:
+When the client opens the webpage, it receives: "Welcome to the WebSocket server!".
+If the client sends "Hello", the server responds with: "You said: Hello".
+Next Steps:
+This is a basic implementation. For production applications, you can:
+Add authentication and encryption (e.g., use wss:// for secure WebSockets).
+Integrate WebSocket communication into more complex real-time systems.
+-------------------------------------------------------------------------------------------------------------------------------------------------------
