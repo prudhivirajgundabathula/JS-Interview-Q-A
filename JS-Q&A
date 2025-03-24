@@ -467,6 +467,10 @@ console.log(index); // Output: 3 (index of the element 4)
 let nestedArray = [1, [2, [3, [4]]]];
 let flatArray = nestedArray.flat(2); // Flatten up to depth 2
 console.log(flatArray); // Output: [1, 2, 3, [4]]
+EXample-2
+const nestedArray = [1, [2, [3, [4]]], 5];
+const flattened = nestedArray.flat(Infinity); // Flatten all levels
+console.log(flattened); // Output: [1, 2, 3, 4, 5]
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 23.flatMap() : First maps each element using a mapping function, then flattens the result into a new array. It's essentially a combination of map() and flat().
 let numbers = [1, 2, 3];
