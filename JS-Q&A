@@ -1304,23 +1304,38 @@ const add5 = add(5);
 console.log(add5(3)); // Output: 8
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Memoization: Closures can be used to cache the results of expensive function calls to improve performance.
-function memoize(func) {
-  const cache = {};
-  return function(...args) {
-    const key = JSON.stringify(args);
+What is Memoization?
+Memoization is a way to speed up functions by storing the results of expensive function calls and reusing them when the same inputs occur again. It's particularly useful for recursive functions or functions with repeated calculations.
+Example: Fibonacci Sequence
+Here's a basic example in JavaScript:
+
+function memoize(fn) {
+  const cache = {}; // Create a cache to store results
+  return function (...args) {
+    const key = JSON.stringify(args); // Convert arguments to a string key
     if (cache[key]) {
-      return cache[key];
+      return cache[key]; // Return cached result if it exists
     }
-    const result = func(...args);
-    cache[key] = result;
-    return result;
+    const result = fn(...args); // Compute the result
+    cache[key] = result; // Store the result in the cache
+    return result; // Return the result
   };
 }
-const factorial = memoize(function(n) {
-  if (n === 0) return 1;
-  return n * factorial(n - 1);
-});
-console.log(factorial(5)); // Output: 120
+function fibonacci(n) {
+  if (n <= 1) return n; // Base case
+  return fibonacci(n - 1) + fibonacci(n - 2); // Recursive case
+}
+const memoizedFibonacci = memoize(fibonacci);
+
+Explanation
+- Cache: The memoize function creates a cache to store results of previous function calls.
+- Key: The arguments passed to the function are converted into a string key using JSON.stringify.
+- Check Cache: Before computing the result, the function checks if the result for the given key already exists in the cache.
+- Compute and Store: If the result isn't in the cache, the function computes it, stores it in the cache, and returns it.
+- Reuse: When the function is called again with the same inputs, the cached result is returned, saving computation time.
+
+Why Use Memoization?
+Memoization reduces redundant calculations, making your code faster and more efficient. In the Fibonacci example, it avoids recalculating the same values multiple times, which is especially useful for large inputs.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Advantages of Closures
 Data Privacy: Closures allow you to create private variables and methods, which cannot be accessed or modified from outside the function.
