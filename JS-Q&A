@@ -3886,7 +3886,39 @@ Use Cases
 ✅ Infinite scrolling – Load more data dynamically.
 ✅ Fetching all results – Some APIs limit results per request.
 ✅ Ensuring ordered processing – When later pages depend on earlier ones.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pipe and Compose : Pipe and Composeare functional programming techniques used to apply multiple functions in sequence to transform data. Both help in function composition, making code more readable and maintainable.
+
+1. Pipe (pipe)
+pipe applies functions from left to right (first function → second function → third function).
+Example: Processing a String
+const toUpperCase = str => str.toUpperCase();
+const replaceSpaces = str => str.replace(/\s+/g, '-');
+const addExclamation = str => str + "!";
+
+const pipe = (...fns) => value => fns.reduce((acc, fn) => fn(acc), value);
+
+const processText = pipe(toUpperCase, replaceSpaces, addExclamation);
+
+console.log(processText("hello world functional programming")); 
+// Output: "HELLO-WORLD-FUNCTIONAL-PROGRAMMING!"
+
+✅ Executes functions in order from left to right
+✅ Improves readability by separating concerns
+
+2. Compose (compose)
+compose is similar to pipe, but it applies functions from right to left (last function → previous function → first function).
+Example: Same Operations, Using compose
+const compose = (...fns) => value => fns.reduceRight((acc, fn) => fn(acc), value);
+
+const processTextCompose = compose(addExclamation, replaceSpaces, toUpperCase);
+
+console.log(processTextCompose("hello world functional programming")); 
+// Output: "HELLO-WORLD-FUNCTIONAL-PROGRAMMING!"
+
+✅ Executes functions from right to left
+✅ Useful when thinking mathematically, as functions compose naturall
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Explore how Object-Oriented Programming (OOP) principles can be applied when coding in JS
 JavaScript is a multi-paradigm language that supports Object-Oriented Programming (OOP) principles. While it is prototype-based (rather than class-based), modern JavaScript (ES6+) introduces syntax like class that makes it easier to apply OOP principles. Below, we’ll explore how the four main OOP principles—Encapsulation, Abstraction, Inheritance, and Polymorphism—can be applied in JavaScript.
 1. Encapsulation : Encapsulation is the bundling of data (properties) and methods (functions) that operate on the data into a single unit (an object or class). It also involves restricting direct access to some of an object's components, which is known as data hiding.
