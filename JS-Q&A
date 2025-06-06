@@ -255,7 +255,176 @@ let a = 10;
 let b = 2;
 console.log(a + b); // Output: 12 (Addition)
 In summary, unary operators take a single operand and perform a specific operation, while binary operators require two operands and perform an operation between them. 
--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A chain calculator is a calculator that supports method chaining, allowing multiple operations to be performed sequentially in a single expression. Instead of writing separate calculations, you can "chain" methods together, making the process more concise and readable.
+How It Works
+- Starts with an initial value.
+- Supports operations like addition, subtraction, multiplication, division etc.
+- Each method returns this, allowing continued chaining.
+- The final result is retrieved using .result() or another getter method.
+Example: JavaScript Chain Calculator
+
+class ChainCalculator {
+    constructor(value = 0) {
+        this.value = value;
+    }
+
+    add(num) {
+        this.value += num;
+        return this;
+    }
+
+    subtract(num) {
+        this.value -= num;
+        return this;
+    }
+
+    multiply(num) {
+        this.value *= num;
+        return this;
+    }
+
+    divide(num) {
+        if (num === 0) {
+            console.error("Cannot divide by zero!");
+            return this;
+        }
+        this.value /= num;
+        return this;
+    }
+
+    exponentiate(power) {
+        this.value = Math.pow(this.value, power);
+        return this;
+    }
+
+    modulo(num) {
+        this.value %= num;
+        return this;
+    }
+
+    percentage(percent) {
+        this.value = (this.value * percent) / 100;
+        return this;
+    }
+
+    result() {
+        return this.value;
+    }
+}
+
+// Example Usage:
+const calc = new ChainCalculator(100);
+let finalResult = calc.add(50).subtract(20).multiply(2).divide(5).exponentiate(2).modulo(7).percentage(50).result();
+
+console.log(finalResult); // Output: 1.5
+
+Advantages of a Chain Calculator
+✅ Cleaner code – Reduces redundant calculations.
+✅ Improved readability – No need for intermediate variables.
+✅ Flexible operations – Perform multiple computations in one statement.
+✅ Useful for financial calculations – Can be extended to support tax calculations, interest rates, etc.
+
+The chain calculator concept is primarily used for mathematical operations, but you can extend it to support any kind of chained operations, including string manipulations, data transformations, and API requests.
+Expanding Beyond Math – Other Applications
+1️⃣ String Manipulation
+class StringProcessor {
+    constructor(str = "") {
+        this.str = str;
+    }
+
+    toUpperCase() {
+        this.str = this.str.toUpperCase();
+        return this;
+    }
+
+    replace(find, replaceWith) {
+        this.str = this.str.replace(find, replaceWith);
+        return this;
+    }
+
+    trim() {
+        this.str = this.str.trim();
+        return this;
+    }
+
+    result() {
+        return this.str;
+    }
+}
+
+const text = new StringProcessor("  hello world ")
+    .trim()
+    .toUpperCase()
+    .replace("WORLD", "Copilot")
+    .result();
+
+console.log(text); // Output: "HELLO COPILOT"
+
+2️⃣ Data Transformation (JSON Handling)
+class JSONTransformer {
+    constructor(data = {}) {
+        this.data = data;
+    }
+
+    addProperty(key, value) {
+        this.data[key] = value;
+        return this;
+    }
+
+    removeProperty(key) {
+        delete this.data[key];
+        return this;
+    }
+
+    stringify() {
+        this.data = JSON.stringify(this.data);
+        return this;
+    }
+
+    result() {
+        return this.data;
+    }
+}
+
+const jsonData = new JSONTransformer({ name: "Alice" })
+    .addProperty("age", 25)
+    .removeProperty("name")
+    .stringify()
+    .result();
+
+console.log(jsonData); // Output: '{"age":25}'
+
+3️⃣ Chained API Requests
+class APIChain {
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+        this.endpoints = [];
+    }
+
+    addEndpoint(endpoint) {
+        this.endpoints.push(endpoint);
+        return this;
+    }
+
+    async fetchAll() {
+        const results = await Promise.all(
+            this.endpoints.map(ep => fetch(`${this.baseUrl}/${ep}`).then(res => res.json()))
+        );
+        return results;
+    }
+}
+
+const api = new APIChain("https://api.example.com")
+    .addEndpoint("users")
+    .addEndpoint("posts")
+    .addEndpoint("comments");
+
+api.fetchAll().then(data => console.log(data));
+
+✅ The power of chaining extends beyond math!
+It can be used in string processing, data handling, API workflows, and more.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 1. What is an array in JavaScript?
 Answer: An array in JavaScript is a data structure used to store multiple values in a single variable. It allows you to store elements of different data types, such as numbers, strings, objects, or even other arrays (nested arrays). Arrays are indexed, with the first element at index 0.
 let fruits = ["apple", "banana", "cherry"];
