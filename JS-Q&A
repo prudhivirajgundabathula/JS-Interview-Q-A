@@ -1152,6 +1152,142 @@ console.log(john.name); // Outputs: John
 console.log(john.age); // Outputs: 30
 Key Points: this Keyword: Refers to the new object being created.
 Naming Convention: Constructor functions are usually capitalized to indicate they should be called with new.
+
+Prototype and Prototype Inheritance in JavaScript
+In JavaScript, prototypes are the foundation of object-oriented programming. They allow objects to inherit properties and methods from other objects, forming a chain known as prototype inheritance.
+
+1. What is a Prototype?
+- Every JavaScript object has an internal property [[Prototype]], which references another object (its prototype).
+- If a property/method is not found in an object, JavaScript looks for it in the prototype chain.
+Example: Basic Prototype Usage
+const person = {
+    greet() {
+        return "Hello!";
+    }
+};
+
+const user = Object.create(person); // user inherits from person
+console.log(user.greet()); // Output: "Hello!"
+
+✅ user doesn’t have greet(), but it inherits it from person.
+
+2. Prototype Inheritance
+Prototypes enable inheritance without the need for classes.
+Example: Extending an Object using Prototype Inheritance
+function Animal(name) {
+    this.name = name;
+}
+
+Animal.prototype.speak = function() {
+    return `${this.name} makes a noise`;
+};
+
+const dog = new Animal("Dog");
+console.log(dog.speak()); // Output: "Dog makes a noise"
+
+
+✅ speak() is defined on Animal.prototype, but accessible to all instances.
+
+3. Classes and Prototype Inheritance
+JavaScript ES6 classes use prototypes internally for inheritance.
+Example: Using Classes
+class Animal {
+    constructor(name) {
+        this.name = name;
+    }
+
+    speak() {
+        return `${this.name} makes a noise`;
+    }
+}
+
+class Dog extends Animal {
+    speak() {
+        return `${this.name} barks`;
+    }
+}
+
+const myDog = new Dog("Buddy");
+console.log(myDog.speak()); // Output: "Buddy barks"
+
+✅ Dog inherits from Animal, but overrides speak().
+
+prototype inheritance in an advanced use case—optimizing object lookup with caching mechanisms.
+Scenario: Caching API Responses Using Prototype Inheritance
+Imagine you frequently request data from an API. Instead of making repeated expensive network calls, you can use prototype inheritance to store cached responses efficiently.
+
+Step 1: Define a Base Cache Object
+function Cache() {
+    this.store = {};
+}
+
+// Method to check cache
+Cache.prototype.get = function(key) {
+    return this.store[key] || null;
+};
+
+// Method to store data
+Cache.prototype.set = function(key, value) {
+    this.store[key] = value;
+};
+
+// Method to clear cache
+Cache.prototype.clear = function() {
+    this.store = {};
+};
+
+
+✅ Efficient memory management
+✅ Quick lookups without repeated API calls
+✅ Prototype methods avoid unnecessary duplication
+
+Step 2: Extend Cache to Create an API Fetcher
+function ApiCache() {
+    Cache.call(this); // Inherit properties
+}
+
+// Inherit methods from Cache
+ApiCache.prototype = Object.create(Cache.prototype);
+ApiCache.prototype.constructor = ApiCache;
+
+// Fetch data (with caching)
+ApiCache.prototype.fetchData = async function(url) {
+    if (this.get(url)) {
+        console.log("Returning cached data...");
+        return this.get(url); // Return cached result
+    }
+
+    console.log("Fetching from API...");
+    const response = await fetch(url);
+    const data = await response.json();
+
+    this.set(url, data); // Store in cache
+    return data;
+};
+
+✅ Avoids redundant network requests
+✅ Uses inheritance to extend cache functionality
+
+Step 3: Use the Optimized API Cache
+const apiCache = new ApiCache();
+
+(async () => {
+    let data1 = await apiCache.fetchData("https://jsonplaceholder.typicode.com/posts/1");
+    console.log(data1);
+
+    // This call will use cached data instead of hitting the API again
+    let data2 = await apiCache.fetchData("https://jsonplaceholder.typicode.com/posts/1");
+    console.log(data2);
+})();
+
+✔ First request fetches from API
+✔ Second request retrieves cached result instantly
+
+Why Use Prototype Inheritance Here?
+🚀 Memory Efficient: Shared cache logic via prototypes avoids redundancy.
+🚀 Performance Boost: Cached lookups prevent unnecessary API requests.
+🚀 Scalability: New methods (like cache expiration) can be added without modifying existing objects.
+
 Prototypes : Prototypes are a powerful mechanism in JavaScript, allowing objects to inherit properties and methods from other objects. Every JavaScript function has a prototype property, which is an object where you can define properties and methods to be shared among all instances created using that constructor function.
 Example: // Adding a method to the Person prototype
 Person.prototype.greet = function() {
@@ -1171,7 +1307,7 @@ let dog = new Animal('Dog');
 dog.speak(); // Outputs: Dog makes a noise.
 Explanation: Constructor Function: Animal constructor initializes the name property.
 Prototype Method: speak method is added to the Animal prototype, allowing all instances of Animal to use it. 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Interview Perspective: Key Questions
 What is a constructor function in JavaScript? How do you create an instance of it?
 Answer: A constructor function in JavaScript is a special function used to create instances of objects. It’s typically defined with a function and named with an uppercase letter.
@@ -1182,7 +1318,7 @@ function Person(name, age) {
 let john = new Person('John', 30);
 console.log(john.name); // Outputs: John
 console.log(john.age); // Outputs: 30
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Explain prototypes in JavaScript. How do they enable inheritance?
 Answer: Prototypes are objects that define properties and methods that can be shared among all instances created using a constructor. They enable inheritance because instances of a constructor have access to the properties and methods defined on the constructor’s prototype.
 function Animal(name) {
@@ -1193,7 +1329,7 @@ Animal.prototype.speak = function() {
 };
 let dog = new Animal('Dog');
 dog.speak(); // Outputs: Dog makes a noise.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 How would you add a method to a constructor's prototype? Provide an example.
 Answer: You add a method to a constructor's prototype by assigning a function to the prototype property of the constructor.
 function Person(name) {
@@ -1204,7 +1340,7 @@ Person.prototype.greet = function() {
 };
 let john = new Person('John');
 john.greet(); // Outputs: Hello, my name is John
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 What is the prototype chain, and how does it work in JavaScript?
 Answer: The prototype chain is a chain of objects used in JavaScript to look up properties and methods. When a property or method is accessed on an object, JavaScript first looks on the object itself. If it’s not found, it looks up the chain on the object’s prototype, continuing up the chain until the property or method is found or the end of the chain (null) is reached.
 Prototype Methods and Properties
@@ -1217,11 +1353,11 @@ let personPrototype = {
 let john = Object.create(personPrototype);
 john.name = 'John';
 john.greet(); // Outputs: Hello, John
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 2. Object.getPrototypeOf(): Returns the prototype of the specified object.
 let proto = Object.getPrototypeOf(john);
 console.log(proto); // Outputs: { greet: [Function: greet] }
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 3. Object.setPrototypeOf(): Sets the prototype of the specified object.
 let animal = {
   speak: function() {
@@ -1230,11 +1366,11 @@ let animal = {
 };
 Object.setPrototypeOf(john, animal);
 john.speak(); // Outputs: John makes a noise.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 4. hasOwnProperty(): Checks if the object has the specified property as its own (not inherited).
 console.log(john.hasOwnProperty('name')); // true
 console.log(john.hasOwnProperty('greet')); // false
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 5. isPrototypeOf(): Checks if an object exists in another object's prototype chain.
 console.log(personPrototype.isPrototypeOf(john)); // false
 console.log(animal.isPrototypeOf(john)); // true
@@ -1269,7 +1405,7 @@ console.log(car1.hasOwnProperty('getDetails')); // false
 // Checking prototype chain
 console.log(Car.prototype.isPrototypeOf(car1)); // true
 console.log(Car.prototype.isPrototypeOf(car2)); // false
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Interview Perspective: Key Questions
 What is Object.create() and how does it differ from a constructor function?
 Object.create() allows you to create a new object with a specified prototype object, whereas a constructor function initializes a new object with specific properties and methods.
