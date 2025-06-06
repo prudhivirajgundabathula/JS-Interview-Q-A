@@ -3562,6 +3562,68 @@ Promise.race([promise1, promise2])
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
+
+promise.any is a powerful method introduced in ES2021 that takes an array of promises and returns the first promise that resolves. If all promises reject, it throws an AggregateError with all the rejection reasons.
+Example Usage
+const p1 = new Promise((resolve, reject) => setTimeout(reject, 100, "Error in p1"));
+const p2 = new Promise((resolve, reject) => setTimeout(resolve, 200, "Success from p2"));
+const p3 = new Promise((resolve, reject) => setTimeout(resolve, 300, "Success from p3"));
+
+Promise.any([p1, p2, p3])
+    .then((result) => console.log("Resolved:", result))  // Output: "Resolved: Success from p2"
+    .catch((error) => console.log("Rejected:", error));
+
+How It Works
+- Promise.any() waits for any promise to resolve and returns the resolved value.
+- If all promises reject, it throws an AggregateError containing the rejection reasons.
+Handling AggregateError
+Promise.any([
+    Promise.reject("Error A"),
+    Promise.reject("Error B"),
+]).catch((error) => {
+    console.log(error.errors); // ["Error A", "Error B"]
+});
+
+Use Cases
+✅ Fastest successful response from multiple API calls.
+✅ Fallback mechanisms, where multiple sources are tried, and any success is accepted.
+✅ Handling first available data instead of waiting for all promises.
+
+Promise.any() only returns the first resolved value, even if all promises succeed. It does not return an array of all resolved values like Promise.all() would.
+If all promises resolve, Promise.any() will simply return the fastest resolved value.
+Example: Handling Multiple API Requests Efficiently
+Imagine we are fetching data from three different APIs, and we want the fastest successful response.
+function fetchData(url) {
+    return new Promise((resolve) => {
+        let time = Math.random() * 3000; // Simulating different response times
+        setTimeout(() => resolve(`Data from ${url}`), time);
+    });
+}
+
+Promise.any([
+    fetchData("https://api1.example.com"),
+    fetchData("https://api2.example.com"),
+    fetchData("https://api3.example.com"),
+]).then((result) => {
+    console.log("First successful response:", result);
+}).catch((error) => {
+    console.log("All requests failed:", error.errors);
+});
+
+How It Works
+✅ Fastest API response is returned—no need to wait for all requests.
+✅ If all fail, it throws an AggregateError.
+✅ Efficient for real-time applications where speed matters.
+
+If you need all successful responses, use Promise.all() instead:
+Promise.all([
+    fetchData("https://api1.example.com"),
+    fetchData("https://api2.example.com"),
+    fetchData("https://api3.example.com"),
+]).then((results) => {
+    console.log("All responses:", results);
+});
+
 Summary : A Promise is a powerful tool for handling asynchronous operations in JavaScript. Its applications include:  Fetching data from APIs, Chaining asynchronous operations, Running tasks in parallel, Handling errors cleanly, Enabling async/await syntax, Creating delays or timeouts, Managing race conditions. By using Promises, you can write more readable, maintainable, and efficient asynchronous code.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Explore how Object-Oriented Programming (OOP) principles can be applied when coding in JS
