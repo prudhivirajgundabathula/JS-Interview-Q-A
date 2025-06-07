@@ -4366,7 +4366,35 @@ console.log(found); // Output: 30
 
 ✅ Stops immediately after finding the first match.
 ✅ Works in older browsers without native .find() support.
+----------------------------------------------------------------------------------------------------------------------------------------
+Debouncing in JavaScript
+Debouncing is a programming technique used to limit the number of times a function executes within a certain timeframe. It is especially useful in handling event listeners like keystrokes, window resizing, or API calls to optimize performance.
 
+Why Use Debouncing?
+✅ Prevents excessive function calls – Avoids unnecessary execution when a user repeatedly triggers an event.
+✅ Improves performance – Reduces CPU usage by controlling rapid event firing.
+✅ Ensures stable application behavior – Limits spam requests in real-time applications.
+
+Basic Debounce Implementation
+function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer); // Reset the timer
+        timer = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+// Example: Debounced input handler
+const handleInput = debounce((text) => {
+    console.log("API Call with:", text);
+}, 500);
+
+document.getElementById("searchBox").addEventListener("input", (event) => {
+    handleInput(event.target.value);
+});
+
+✔ Prevents the function from executing until after 500ms of inactivity.
+✔ Useful for search input fields to avoid excessive API calls.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Throttling : Throttling is a technique used to limit the rate at which a function is executed. It ensures that a function is called at most once in a specified time interval, even if the event that triggers it (e.g., scrolling, resizing, or typing) fires multiple times.
 Use Cases
