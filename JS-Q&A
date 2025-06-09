@@ -4078,6 +4078,53 @@ Use Cases
 ✅ Fetching all results – Some APIs limit results per request.
 ✅ Ensuring ordered processing – When later pages depend on earlier ones.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Cancelable Promise : A Cancelable Promise in JavaScript allows you to abort an ongoing asynchronous operation before it completes. Since native Promises cannot be canceled, developers use techniques like AbortController or custom wrappers to achieve cancellation.
+
+1. Using AbortController (Best for Fetch Requests)
+JavaScript provides AbortController, which can cancel fetch requests before they complete.
+const controller = new AbortController();
+const signal = controller.signal;
+
+fetch("https://jsonplaceholder.typicode.com/posts", { signal })
+    .then(response => response.json())
+    .then(data => console.log("Fetched Data:", data))
+    .catch(error => console.error("Fetch Error:", error));
+
+// Cancel the request after 2 seconds
+setTimeout(() => controller.abort(), 2000);
+
+
+✅ Works with fetch()
+✅ Stops network requests before completion
+✅ Prevents unnecessary API calls
+
+2. Creating a Custom Cancelable Promise
+If you need a general-purpose cancelable promise, you can create a wrapper.
+function createCancelablePromise(executor) {
+    let cancel;
+    const promise = new Promise((resolve, reject) => {
+        cancel = () => reject(new Error("Promise canceled"));
+        executor(resolve, reject);
+    });
+
+    promise.cancel = cancel;
+    return promise;
+}
+
+// Example Usage:
+const cancellable = createCancelablePromise((resolve) => {
+    setTimeout(() => resolve("Task completed!"), 5000);
+});
+
+cancellable.then(console.log).catch(console.error);
+
+// Cancel the promise after 2 seconds
+setTimeout(() => cancellable.cancel(), 2000);
+
+
+✅ Attaches a cancel() method to reject the promise.
+✅ Allows manual cancellation before completion.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Pipe and Compose : Pipe and Composeare functional programming techniques used to apply multiple functions in sequence to transform data. Both help in function composition, making code more readable and maintainable.
 
 1. Pipe (pipe)
