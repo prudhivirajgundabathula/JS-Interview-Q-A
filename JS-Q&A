@@ -4460,7 +4460,7 @@ Throttling vs. Debouncing
 EventEmitter in JavaScript
 In JavaScript, EventEmitter is a pattern used to create and handle events asynchronously. It allows you to emit events and listen for them, making it useful for managing event-driven programming.
 
-1. Using Node.js EventEmitter
+1. Using Node.js Event Emitter
 Node.js provides an EventEmitter class from the 'events' module.
 Example: Creating and Handling Events
 const EventEmitter = require('events');
@@ -4479,7 +4479,7 @@ emitter.emit('message', "Hello, EventEmitter!");
 ✅ emit('event', data) → Triggers an event.
 ✅ Used for event-driven architecture like handling API requests, sockets, and system events.
 
-2. Implementing a Custom EventEmitter
+2. Implementing a Custom event emitter
 If you're not using Node.js, you can create a custom EventEmitter.
 class EventEmitter {
     constructor() {
