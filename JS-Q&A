@@ -3872,6 +3872,7 @@ fetch('https://api.example.com/data')
     .then(response => response.json())
     .then(data => console.log(data))
     .catch(error => console.error('Error:', error));
+
 Chaining Asynchronous Operations: Promises can be chained to perform a sequence of asynchronous operations.
 Example: Chaining Promises
 fetch('https://api.example.com/data')
@@ -3883,14 +3884,78 @@ fetch('https://api.example.com/data')
     .then(response => response.json())
     .then(otherData => console.log(otherData))
     .catch(error => console.error('Error:', error));
+
 Parallel Execution: Use Promise.all() to run multiple promises in parallel and wait for all of them to complete.
-Example: Parallel Execution
-const promise1 = fetch('https://api.example.com/data1');
-const promise2 = fetch('https://api.example.com/data2');
-Promise.all([promise1, promise2])
-    .then(responses => Promise.all(responses.map(res => res.json())))
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+we can execute tasks in parallel using Promise.all(), Promise.allSettled(), or Worker threads in Node.js.
+
+1. Using Promise.all() for Parallel Execution
+Promise.all() allows multiple asynchronous operations to run simultaneously and waits for all to complete.
+function asyncTask(task, time) {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(`${task} completed`), time);
+    });
+}
+
+const tasks = [
+    asyncTask("Task 1", 2000),
+    asyncTask("Task 2", 1000),
+    asyncTask("Task 3", 3000)
+];
+
+Promise.all(tasks).then(results => console.log(results));
+
+✅ Executes all tasks at once
+✅ Waits for all tasks before returning results
+
+2. Using Promise.allSettled() (Handles Failures)
+If some tasks fail, Promise.allSettled() ensures all tasks are processed without stopping execution.
+const tasks = [
+    asyncTask("Task 1", 2000),
+    Promise.reject("Task 2 failed"),
+    asyncTask("Task 3", 3000)
+];
+
+Promise.allSettled(tasks).then(results => console.log(results));
+✔ Handles both success & failure gracefully
+
+Example: Worker Threads in Node.js
+Worker threads allow true parallel execution in Node.js, making them ideal for CPU-intensive tasks.
+Step 1: Create a Worker Thread (worker.js)
+const { parentPort, workerData } = require('worker_threads');
+
+function heavyComputation(n) {
+    let result = 0;
+    for (let i = 0; i < n; i++) {
+        result += Math.sqrt(i);
+    }
+    return result;
+}
+
+parentPort.postMessage(heavyComputation(workerData));
+
+Step 2: Use the Worker in Main Thread (index.js)
+const { Worker } = require('worker_threads');
+
+function runWorker(input) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker('./worker.js', { workerData: input });
+
+        worker.on('message', resolve);
+        worker.on('error', reject);
+        worker.on('exit', code => {
+            if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
+        });
+    });
+}
+
+// Run worker with a large computation
+runWorker(1000000).then(console.log).catch(console.error);
+
+✅ Executes heavy computation in a separate thread
+✅ Prevents blocking the main event loop
+✅ Ideal for CPU-intensive tasks like data processing
+You can find more details in the Node.js Worker Threads documentation and a tutorial on multithreading in Node.js.
+
 Error Handling:Promises provide a clean way to handle errors using .catch().
 Example: Error Handling
 fetch('https://api.example.com/invalid-url')
@@ -3908,13 +3973,15 @@ async function fetchData() {
     }
 }
 fetchData();
+
 Timers and Delays: Promises can be used to create delays or timeouts.
 Example: Creating a Delay
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 delay(1000).then(() => console.log('1 second passed.'));
-Race Conditions: Use Promise.race() to handle scenarios where you want the result of the first settled promise (either fulfilled or rejected).
+
+promise.race() : Race Conditions: Use Promise.race() to handle scenarios where you want the result of the first settled promise (either fulfilled or rejected).
 Example: Using Promise.race
 const promise1 = fetch('https://api.example.com/data1');
 const promise2 = fetch('https://api.example.com/data2');
