@@ -4457,6 +4457,59 @@ Throttling vs. Debouncing
 | Execution | Fires at fixed intervals | Fires only after inactivity | 
 | Best for | Scroll events, mouse movement, periodic API calls | Search boxes, auto-save, form validation | 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EventEmitter in JavaScript
+In JavaScript, EventEmitter is a pattern used to create and handle events asynchronously. It allows you to emit events and listen for them, making it useful for managing event-driven programming.
+
+1. Using Node.js EventEmitter
+Node.js provides an EventEmitter class from the 'events' module.
+Example: Creating and Handling Events
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
+// Define an event listener
+emitter.on('message', (data) => {
+    console.log("Received:", data);
+});
+
+// Emit an event
+emitter.emit('message', "Hello, EventEmitter!");
+
+
+✅ on('event', callback) → Listens for an event.
+✅ emit('event', data) → Triggers an event.
+✅ Used for event-driven architecture like handling API requests, sockets, and system events.
+
+2. Implementing a Custom EventEmitter
+If you're not using Node.js, you can create a custom EventEmitter.
+class EventEmitter {
+    constructor() {
+        this.events = {};
+    }
+
+    on(event, listener) {
+        if (!this.events[event]) {
+            this.events[event] = [];
+        }
+        this.events[event].push(listener);
+    }
+
+    emit(event, ...args) {
+        if (this.events[event]) {
+            this.events[event].forEach(listener => listener(...args));
+        }
+    }
+}
+
+// Usage:
+const emitter = new EventEmitter();
+
+emitter.on('log', message => console.log("Log:", message));
+emitter.emit('log', "Event handling in JavaScript!");
+
+✔ Works without Node.js.
+✔ Allows multiple listeners per event.
+✔ Helps in custom event handling for UI interactions or state management.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 How to Improve App Performance
 Improving app performance involves optimizing both the frontend and backend. Here are some strategies:
 1. Optimize JavaScript
