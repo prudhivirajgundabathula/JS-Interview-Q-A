@@ -871,6 +871,7 @@ button.addEventListener('click', handleClick);
 // Later in your code, you can remove the event listener
 button.removeEventListener('click', handleClick);
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+for in, for each, and for of loops 
 1️⃣ for...in Loop
 🔹 What is it?
 The for...in loop iterates over the keys (property names) of an object or the indices of an array.
@@ -966,10 +967,8 @@ Choose for...of When: You want to iterate over the values of an array, string, o
 Example: Iterating through a list of array elements.
 Choose forEach When: You are working with arrays only.
 You want to perform a specific action for each element without needing to break out of the loop.
+
 Practical Example: Comparing All Three Loops
-javascript
-Copy
-Edit
 const fruits = ["Apple", "Banana", "Cherry"];
 const fruitObj = { 0: "Apple", 1: "Banana", 2: "Cherry" };
 
@@ -1005,7 +1004,6 @@ Using forEach:
 Index: 0, Value: Apple
 Index: 1, Value: Banana
 Index: 2, Value: Cherry
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4. break Statement : The break statement is used to exit a loop or a switch statement prematurely based on a specific condition.
 Example:javascript
