@@ -4674,6 +4674,84 @@ emitter.emit('log', "Event handling in JavaScript!");
 ✔ Allows multiple listeners per event.
 ✔ Helps in custom event handling for UI interactions or state management.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
+Typeahead Search Using LRU Cache in JavaScript
+Typeahead search provides real-time suggestions as the user types, improving performance by caching previously searched results using LRU (Least Recently Used) Cache.
+
+1. LRU Cache Implementation
+An LRU Cache stores recently accessed items and removes the least used ones when the cache reaches its limit.
+class LRUCache {
+    constructor(limit = 5) {
+        this.limit = limit;
+        this.cache = new Map();
+    }
+
+    get(key) {
+        if (!this.cache.has(key)) return null;
+
+        const value = this.cache.get(key);
+        this.cache.delete(key);
+        this.cache.set(key, value); // Move to the most recent position
+
+        return value;
+    }
+
+    set(key, value) {
+        if (this.cache.has(key)) this.cache.delete(key);
+
+        if (this.cache.size >= this.limit) {
+            const leastUsedKey = this.cache.keys().next().value;
+            this.cache.delete(leastUsedKey);
+        }
+
+        this.cache.set(key, value);
+    }
+}
+
+
+✅ Stores search results efficiently
+✅ Removes least used items when full
+✅ Improves performance for frequently searched terms
+
+2. Typeahead Search Using LRU Cache
+Now, integrate the LRU Cache into a Typeahead search system.
+const cache = new LRUCache(5);
+
+async function fetchSuggestions(query) {
+    if (!query) return [];
+
+    const cachedResult = cache.get(query);
+    if (cachedResult) {
+        console.log("Cache Hit!");
+        return cachedResult;
+    }
+
+    console.log("Fetching from API...");
+    const response = await fetch(`https://api.example.com/suggestions?q=${query}`);
+    const suggestions = await response.json();
+
+    cache.set(query, suggestions);
+    return suggestions;
+}
+
+// Simulate User Typing
+async function simulateTyping() {
+    console.log(await fetchSuggestions("Java"));
+    console.log(await fetchSuggestions("JavaScript"));
+    console.log(await fetchSuggestions("Java")); // Cache hit
+}
+
+simulateTyping();
+
+✅ Caches search results for repeated queries.
+✅ Avoids redundant API calls, making search faster.
+✅ Efficiently manages frequently searched items using LRU Cache.
+
+Where Can This Be Used?
+🚀 Search bars with real-time suggestions
+🚀 Autocomplete systems for user input
+🚀 API-heavy applications needing cached results
+Would you like an example where this integrates with a frontend UI using React or Vanilla JavaScript? 🚀
+--------------------------------------------------------------------------------------------------------------------------------------------------------
 How to Improve App Performance
 Improving app performance involves optimizing both the frontend and backend. Here are some strategies:
 1. Optimize JavaScript
