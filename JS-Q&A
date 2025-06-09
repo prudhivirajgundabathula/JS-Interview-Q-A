@@ -501,7 +501,7 @@ let numbers = [1, 2, 3, 4, 5];
 let doubled = numbers.map(num => num * 2);
 console.log(doubled); // Output: [2, 4, 6, 8, 10]
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-MapLimit : If you're referring to applying .map() with a limit on how many items it processes, JavaScript's built-in .map() method doesn't directly provide a limit option. However, you can easily implement one!
+maplimit MapLimit : If you're referring to applying .map() with a limit on how many items it processes, JavaScript's built-in .map() method doesn't directly provide a limit option. However, you can easily implement one!
 
 1. Limiting .map() Processing
 You can slice the array to limit the number of items processed:
