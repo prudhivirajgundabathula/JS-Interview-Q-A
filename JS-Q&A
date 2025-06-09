@@ -531,6 +531,32 @@ processLimitedRequests();
 
 ✔ Limits processing to 3 items
 ✔ Prevents excessive API calls
+
+Here's an example where pagination is used in an API request, fetching data page by page.
+
+Scenario: Fetching Paginated API Data
+Many APIs provide paginated data where you specify a page and limit to retrieve results. This helps prevent overloading the server and improves performance.
+Example: Fetch GitHub Users (10 per page)
+async function fetchPaginatedData(page, limit) {
+    const response = await fetch(`https://api.github.com/users?per_page=${limit}&page=${page}`);
+    const data = await response.json();
+    return data;
+}
+
+async function getAllPages(totalPages, limit) {
+    for (let page = 1; page <= totalPages; page++) {
+        let users = await fetchPaginatedData(page, limit);
+        console.log(`Page ${page}:`, users);
+    }
+}
+
+// Fetch 3 pages, 10 users per page
+getAllPages(3, 10);
+
+How It Works
+✅ Fetches API data in chunks (controlled by limit).
+✅ Iterates through pages dynamically based on totalPages.
+✅ Optimizes API requests, reducing unnecessary data load.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 13. reduce() Method in JavaScript
 The reduce() method in JavaScript is used to reduce an array to a single value by executing a callback function for each element of the array. It is useful for operations like summing up numbers, flattening arrays, or building complex objects.
