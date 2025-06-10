@@ -3959,170 +3959,52 @@ fetch('https://api.example.com/data')
 Parallel Execution: Use Promise.all() to run multiple promises in parallel and wait for all of them to complete.
 we can execute tasks in parallel using Promise.all(), Promise.allSettled(), or Worker threads in Node.js.
 
-1. Using Promise.all() for Parallel Execution
-Promise.all() allows multiple asynchronous operations to run simultaneously and waits for all to complete.
-function asyncTask(task, time) {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(`${task} completed`), time);
-    });
-}
+1. Promise.all() → Runs all promises in parallel and waits for all to resolve
+If any promise fails, the entire Promise.all() rejects.
+const p1 = Promise.resolve("✅ Task 1 Done");
+const p2 = new Promise(resolve => setTimeout(() => resolve("✅ Task 2 Done"), 2000));
+const p3 = Promise.resolve("✅ Task 3 Done");
 
-const tasks = [
-    asyncTask("Task 1", 2000),
-    asyncTask("Task 2", 1000),
-    asyncTask("Task 3", 3000)
-];
+Promise.all([p1, p2, p3]).then(console.log).catch(console.error);
+//Output (after 2 sec):
+["✅ Task 1 Done", "✅ Task 2 Done", "✅ Task 3 Done"]
+✅ Best for parallel execution when all must succeed
 
-Promise.all(tasks).then(results => console.log(results));
+2. Promise.race() → Resolves or rejects as soon as the first promise completes
+Only the fastest promise's result is returned.
+const p1 = new Promise(resolve => setTimeout(() => resolve("🏁 Fastest Task!"), 1000));
+const p2 = new Promise(resolve => setTimeout(() => resolve("✅ Slow Task"), 3000));
 
-✅ Executes all tasks at once
-✅ Waits for all tasks before returning results
+Promise.race([p1, p2]).then(console.log).catch(console.error);
+//Output (after 1 sec):
+"🏁 Fastest Task!"
+✅ Best for timeout handling or early results
 
-2. Using Promise.allSettled() (Handles Failures)
-If some tasks fail, Promise.allSettled() ensures all tasks are processed without stopping execution.
-const tasks = [
-    asyncTask("Task 1", 2000),
-    Promise.reject("Task 2 failed"),
-    asyncTask("Task 3", 3000)
-];
+3. Promise.any() → Returns first successful promise, ignores failures
+Unlike race(), it waits for success before resolving.
+const p1 = Promise.reject("❌ Failed Task 1");
+const p2 = new Promise(resolve => setTimeout(() => resolve("✅ Task 2 Done"), 2000));
+const p3 = Promise.reject("❌ Failed Task 3");
 
-Promise.allSettled(tasks).then(results => console.log(results));
-✔ Handles both success & failure gracefully
+Promise.any([p1, p2, p3]).then(console.log).catch(console.error);
+//Output (after 2 sec):
+"✅ Task 2 Done"
+✅ Best when you need the first successful result
 
-Example: Worker Threads in Node.js
-Worker threads allow true parallel execution in Node.js, making them ideal for CPU-intensive tasks.
-Step 1: Create a Worker Thread (worker.js)
-const { parentPort, workerData } = require('worker_threads');
+4. Promise.allSettled() → Waits for all promises to complete (success or failure)
+Unlike Promise.all(), it never rejects—it returns all results.
+const p1 = Promise.resolve("✅ Task 1 Done");
+const p2 = Promise.reject("❌ Task 2 Failed");
+const p3 = new Promise(resolve => setTimeout(() => resolve("✅ Task 3 Done"), 2000));
 
-function heavyComputation(n) {
-    let result = 0;
-    for (let i = 0; i < n; i++) {
-        result += Math.sqrt(i);
-    }
-    return result;
-}
-
-parentPort.postMessage(heavyComputation(workerData));
-
-Step 2: Use the Worker in Main Thread (index.js)
-const { Worker } = require('worker_threads');
-
-function runWorker(input) {
-    return new Promise((resolve, reject) => {
-        const worker = new Worker('./worker.js', { workerData: input });
-
-        worker.on('message', resolve);
-        worker.on('error', reject);
-        worker.on('exit', code => {
-            if (code !== 0) reject(new Error(`Worker stopped with exit code ${code}`));
-        });
-    });
-}
-
-// Run worker with a large computation
-runWorker(1000000).then(console.log).catch(console.error);
-
-✅ Executes heavy computation in a separate thread
-✅ Prevents blocking the main event loop
-✅ Ideal for CPU-intensive tasks like data processing
-You can find more details in the Node.js Worker Threads documentation and a tutorial on multithreading in Node.js.
-
-Error Handling:Promises provide a clean way to handle errors using .catch().
-Example: Error Handling
-fetch('https://api.example.com/invalid-url')
-    .then(response => response.json())
-    .catch(error => console.error('Fetch error:', error));
-Async/Await: Promises are the foundation of the async/await syntax, which makes asynchronous code look synchronous.
-Example: Using Async/Await
-async function fetchData() {
-    try {
-        const response = await fetch('https://api.example.com/data');
-        const data = await response.json();
-        console.log(data);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-fetchData();
-
-Timers and Delays: Promises can be used to create delays or timeouts.
-Example: Creating a Delay
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-delay(1000).then(() => console.log('1 second passed.'));
-
-promise.race() : Race Conditions: Use Promise.race() to handle scenarios where you want the result of the first settled promise (either fulfilled or rejected).
-Example: Using Promise.race
-const promise1 = fetch('https://api.example.com/data1');
-const promise2 = fetch('https://api.example.com/data2');
-Promise.race([promise1, promise2])
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-
-promise.any is a powerful method introduced in ES2021 that takes an array of promises and returns the first promise that resolves. If all promises reject, it throws an AggregateError with all the rejection reasons.
-Example Usage
-const p1 = new Promise((resolve, reject) => setTimeout(reject, 100, "Error in p1"));
-const p2 = new Promise((resolve, reject) => setTimeout(resolve, 200, "Success from p2"));
-const p3 = new Promise((resolve, reject) => setTimeout(resolve, 300, "Success from p3"));
-
-Promise.any([p1, p2, p3])
-    .then((result) => console.log("Resolved:", result))  // Output: "Resolved: Success from p2"
-    .catch((error) => console.log("Rejected:", error));
-
-How It Works
-- Promise.any() waits for any promise to resolve and returns the resolved value.
-- If all promises reject, it throws an AggregateError containing the rejection reasons.
-Handling AggregateError
-Promise.any([
-    Promise.reject("Error A"),
-    Promise.reject("Error B"),
-]).catch((error) => {
-    console.log(error.errors); // ["Error A", "Error B"]
-});
-
-Use Cases
-✅ Fastest successful response from multiple API calls.
-✅ Fallback mechanisms, where multiple sources are tried, and any success is accepted.
-✅ Handling first available data instead of waiting for all promises.
-
-Promise.any() only returns the first resolved value, even if all promises succeed. It does not return an array of all resolved values like Promise.all() would.
-If all promises resolve, Promise.any() will simply return the fastest resolved value.
-Example: Handling Multiple API Requests Efficiently
-Imagine we are fetching data from three different APIs, and we want the fastest successful response.
-function fetchData(url) {
-    return new Promise((resolve) => {
-        let time = Math.random() * 3000; // Simulating different response times
-        setTimeout(() => resolve(`Data from ${url}`), time);
-    });
-}
-
-Promise.any([
-    fetchData("https://api1.example.com"),
-    fetchData("https://api2.example.com"),
-    fetchData("https://api3.example.com"),
-]).then((result) => {
-    console.log("First successful response:", result);
-}).catch((error) => {
-    console.log("All requests failed:", error.errors);
-});
-
-How It Works
-✅ Fastest API response is returned—no need to wait for all requests.
-✅ If all fail, it throws an AggregateError.
-✅ Efficient for real-time applications where speed matters.
-
-If you need all successful responses, use Promise.all() instead:
-Promise.all([
-    fetchData("https://api1.example.com"),
-    fetchData("https://api2.example.com"),
-    fetchData("https://api3.example.com"),
-]).then((results) => {
-    console.log("All responses:", results);
-});
-
-Summary : A Promise is a powerful tool for handling asynchronous operations in JavaScript. Its applications include:  Fetching data from APIs, Chaining asynchronous operations, Running tasks in parallel, Handling errors cleanly, Enabling async/await syntax, Creating delays or timeouts, Managing race conditions. By using Promises, you can write more readable, maintainable, and efficient asynchronous code.
+Promise.allSettled([p1, p2, p3]).then(console.log);
+//Output (after 2 sec):
+[
+  { status: "fulfilled", value: "✅ Task 1 Done" },
+  { status: "rejected", reason: "❌ Task 2 Failed" },
+  { status: "fulfilled", value: "✅ Task 3 Done" }
+]
+✅ Best when you need results from all promises, even failures
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Promises in sequence : Executing promises in sequence ensures that each promise resolves before moving to the next one. This is useful when operations depend on the completion of previous tasks, like fetching paginated API data or processing database queries in order.
 Method 1: Using .then() Chaining
