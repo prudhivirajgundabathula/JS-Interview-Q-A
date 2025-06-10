@@ -4905,7 +4905,6 @@ emitter.on('message', (data) => {
 // Emit an event
 emitter.emit('message', "Hello, EventEmitter!");
 
-
 ✅ on('event', callback) → Listens for an event.
 ✅ emit('event', data) → Triggers an event.
 ✅ Used for event-driven architecture like handling API requests, sockets, and system events.
@@ -4933,13 +4932,42 @@ class EventEmitter {
 
 // Usage:
 const emitter = new EventEmitter();
-
 emitter.on('log', message => console.log("Log:", message));
 emitter.emit('log', "Event handling in JavaScript!");
 
 ✔ Works without Node.js.
 ✔ Allows multiple listeners per event.
 ✔ Helps in custom event handling for UI interactions or state management.
+
+Extended version of Event emitter : An extended version of EventEmitter provides additional features beyond the standard Node.js EventEmitter. One popular implementation is EventEmitter2, which enhances event handling with wildcards, namespaces, async listeners, and TTL (Time To Live) for events.
+Key Features of EventEmitter2
+✅ Wildcard Events → Listen to multiple events using patterns.
+✅ Namespaces → Organize events with hierarchical naming.
+✅ Async Listeners → Supports Promise.all() for async event handling.
+✅ TTL (Time To Live) → Limits how many times an event can be emitted.
+✅ Event Propagation → Allows listening to external event emitters.
+
+Example: Using EventEmitter2
+const EventEmitter2 = require("eventemitter2").EventEmitter2;
+
+const emitter = new EventEmitter2({
+    wildcard: true, // Enables wildcard event listening
+    delimiter: "::", // Custom delimiter for namespaces
+    maxListeners: 20 // Sets max listeners
+});
+
+// Listen to all events under "user.*"
+emitter.on("user.*", (data) => {
+    console.log(`User event triggered:`, data);
+});
+
+// Emit events
+emitter.emit("user.login", { username: "Alice" });
+emitter.emit("user.logout", { username: "Bob" });
+
+Output:
+User event triggered: { username: 'Alice' }
+User event triggered: { username: 'Bob' }
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 Typeahead Search Using LRU Cache in JavaScript
 Typeahead search provides real-time suggestions as the user types, improving performance by caching previously searched results using LRU (Least Recently Used) Cache.
