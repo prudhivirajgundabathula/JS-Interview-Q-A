@@ -2312,16 +2312,30 @@ console.log(clone.birthday); // Converted to string, not a Date
 ❌ Does not support methods, Date, Map, Set
 
 3. Using Lodash (_.cloneDeep()) for Reliable Deep Cloning
-Lodash provides a robust _.cloneDeep() method.
+Explanation of _.cloneDeep() in Lodash
+Lodash’s _.cloneDeep() method performs a deep copy of an object, ensuring that nested properties are fully duplicated rather than just referencing the original.
 
+Step-by-Step Breakdown
 const _ = require("lodash");
 const original = { name: "Charlie", nested: { key: "value" } };
-const clone = _.cloneDeep(original);
+const clone = _.cloneDeep(original); //  _cloneDeep imported from the Lodash library [ https://lodash.com/docs/4.17.15#cloneDeep ]
 clone.nested.key = "newValue";
 
-console.log(original.nested.key); // "value" (Original stays unchanged)
-✔ Handles functions, dates, maps, and sets
-✔ Best for complex objects
+console.log(original.nested.key); // Output: "value"
+console.log(clone.nested.key);    // Output: "newValue"
+
+How It Works
+- Creates a Deep Copy
+- _.cloneDeep(original) recursively clones every property of original, including objects inside it.
+- Unlike Object.assign() or {...original}, this ensures nested objects are also copied, not just referenced.
+- Modifying the Clone Does Not Affect the Original
+- clone.nested.key = "newValue"; updates only the clone, leaving original unchanged.
+- console.log(original.nested.key); still shows "value" because the original object remains intact.
+Why Use _.cloneDeep()?
+✅ Preserves complex structures (arrays, nested objects, functions).
+✅ Prevents accidental mutations when working with state management.
+✅ Handles cyclic references (avoiding infinite loops in deeply nested structures).
+You can also explore Lodash's documentation for more details!
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Cookies in JavaScript
 Overview: Cookies are small pieces of data stored by the browser that are sent to the server with every HTTP request. They are often used to store user preferences, session information, and tracking data.
