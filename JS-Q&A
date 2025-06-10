@@ -4073,6 +4073,80 @@ ES Modules: Use import and export for modern JavaScript (browsers and Node.js).
 Dynamic Imports: Load modules conditionally or asynchronously.
 By using modules, you can organize your code into reusable and maintainable files, making it easier to share functionality across your application.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Retry a Promise N Times : Retrying a promise ensures that an operation (like an API call) is attempted multiple times if it initially fails. This is useful when handling temporary network issues or unstable functions.
+
+Example 1: Retry a Promise N Times (Recursive Approach)
+function retryPromise(fn, retries = 3, delay = 1000) {
+    return new Promise((resolve, reject) => {
+        fn()
+            .then(resolve)
+            .catch((error) => {
+                if (retries > 0) {
+                    console.log(`Retrying... Attempts left: ${retries}`);
+                    setTimeout(() => {
+                        retryPromise(fn, retries - 1, delay).then(resolve).catch(reject);
+                    }, delay);
+                } else {
+                    reject(error);
+                }
+            });
+    });
+}
+
+// Example: Simulating an Unstable API Call
+const unstableTask = () => new Promise((resolve, reject) => {
+    Math.random() > 0.6 ? resolve("✅ Success!") : reject("❌ Failed");
+});
+
+retryPromise(unstableTask, 5, 500).then(console.log).catch(console.error);
+
+How It Works
+1️⃣ The function calls the promise (fn()).
+2️⃣ If the promise resolves, the result is returned.
+3️⃣ If it fails, the function retries up to N times, waiting delay milliseconds between attempts.
+4️⃣ If all retries fail, it throws an error.
+
+Possible Outputs
+Success Scenario (After 2nd Attempt)
+Retrying... Attempts left: 5
+Retrying... Attempts left: 4
+✅ Success!
+
+Failure Scenario (After All 5 Attempts)
+Retrying... Attempts left: 5
+Retrying... Attempts left: 4
+Retrying... Attempts left: 3
+Retrying... Attempts left: 2
+Retrying... Attempts left: 1
+❌ Failed
+
+Example 2: Using async/await for Cleaner Syntax
+async function retryAsync(fn, retries = 3, delay = 1000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await fn();
+        } catch (error) {
+            console.log(`Attempt ${i + 1} failed. Retrying...`);
+            await new Promise(res => setTimeout(res, delay));
+        }
+    }
+    throw new Error("Max retries reached");
+}
+
+// Example Usage
+retryAsync(unstableTask, 5, 500).then(console.log).catch(console.error);
+
+Recursive Approach (retryPromise)
+- Uses a recursive function call to retry a promise after failure.
+- Maintains a clear call stack, allowing controlled retries.
+- Easier to customize for dynamic delays or different retry logic.
+- Nested calls may be harder to debug in complex flows.
+Loop-based Approach (retryAsync)
+- Uses a for loop with async/await for simpler execution.
+- More readable and structured than recursion.
+- Better suited for handling failures in sequence, keeping clean syntax.
+- Requires await, which might not work well in all cases (e.g., inside array functions).
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Define what a promise is and describe its applications.
 What is a Promise? : A Promise in JavaScript is an object that represents the eventual completion (or failure) of an asynchronous operation and its resulting value. It is a way to handle asynchronous operations more elegantly than using callbacks, avoiding the "callback hell" problem.
 A Promise has three states:
