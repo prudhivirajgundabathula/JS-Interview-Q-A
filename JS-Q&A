@@ -2285,7 +2285,44 @@ obj.increment();
 No arguments Object: Arrow functions do not have their own arguments object, so you need to use rest parameters if you need to work with a variable number of arguments.
 const sum = (...args) => args.reduce((acc, curr) => acc + curr, 0);
 console.log(sum(1, 2, 3, 4)); // Outputs: 10
-----------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Deep Cloning an Object in JavaScript
+Deep cloning creates a new object that is an exact copy of the original, including nested properties, ensuring that changes to one object don't affect the other.
+
+1. Using structuredClone() (Best for Simple Cases)
+ES2023 introduced structuredClone() for deep cloning without extra dependencies.
+
+const original = { name: "Alice", details: { age: 25, city: "New York" } };
+const clone = structuredClone(original);
+clone.details.city = "Los Angeles";
+
+console.log(original.details.city); // "New York" (Original remains unchanged)
+console.log(clone.details.city);    // "Los Angeles"
+✅ Supports nested objects
+✅ Works for arrays, objects, dates
+
+2. Using JSON.parse(JSON.stringify()) (Simple But Limited)
+This method works for plain objects, but loses functions, Date, Map, and Set values.
+
+const original = { name: "Bob", birthday: new Date("1990-01-01") };
+const clone = JSON.parse(JSON.stringify(original));
+
+console.log(clone.birthday); // Converted to string, not a Date
+✔ Fast & simple
+❌ Does not support methods, Date, Map, Set
+
+3. Using Lodash (_.cloneDeep()) for Reliable Deep Cloning
+Lodash provides a robust _.cloneDeep() method.
+
+const _ = require("lodash");
+const original = { name: "Charlie", nested: { key: "value" } };
+const clone = _.cloneDeep(original);
+clone.nested.key = "newValue";
+
+console.log(original.nested.key); // "value" (Original stays unchanged)
+✔ Handles functions, dates, maps, and sets
+✔ Best for complex objects
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Cookies in JavaScript
 Overview: Cookies are small pieces of data stored by the browser that are sent to the server with every HTTP request. They are often used to store user preferences, session information, and tracking data.
 Key Operations on Cookies
