@@ -1272,6 +1272,29 @@ let person = { name: 'John', greet: function() {
 console.log('Hello, ' + this.name); } };
 person.greet(); // Outputs: Hello, John
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Array Dispatch event on push : To dispatch an event when an array's push() method is called, you can override the method and trigger a custom event.
+Example: Dispatching an Event on push()
+const myArray = [];
+const eventTarget = new EventTarget();
+
+myArray.push = function (...items) {
+    Array.prototype.push.apply(this, items);
+    eventTarget.dispatchEvent(new Event("arrayUpdated"));
+};
+
+// Listen for the event
+eventTarget.addEventListener("arrayUpdated", () => {
+    console.log("Array was updated!", myArray);
+});
+
+// Push an item
+myArray.push(42);
+
+How It Works
+✅ Overrides push() to trigger an event
+✅ Uses EventTarget to dispatch a custom event
+✅ Allows listening for changes dynamically
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 object flattening : Flattening an Object in JavaScript :Flattening an object means converting a nested object into a single-level structure with key-value pairs representing deep paths.
 Example: Flattening a Nested Object
 
