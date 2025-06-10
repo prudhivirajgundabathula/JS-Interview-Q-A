@@ -1272,7 +1272,7 @@ let person = { name: 'John', greet: function() {
 console.log('Hello, ' + this.name); } };
 person.greet(); // Outputs: Hello, John
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Flattening an Object in JavaScript :Flattening an object means converting a nested object into a single-level structure with key-value pairs representing deep paths.
+object flattening : Flattening an Object in JavaScript :Flattening an object means converting a nested object into a single-level structure with key-value pairs representing deep paths.
 Example: Flattening a Nested Object
 
 function flattenObject(obj, prefix = "") {
