@@ -1272,6 +1272,47 @@ let person = { name: 'John', greet: function() {
 console.log('Hello, ' + this.name); } };
 person.greet(); // Outputs: Hello, John
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Flattening an Object in JavaScript :Flattening an object means converting a nested object into a single-level structure with key-value pairs representing deep paths.
+Example: Flattening a Nested Object
+
+function flattenObject(obj, prefix = "") {
+    let result = {};
+    
+    for (const [key, value] of Object.entries(obj)) {
+        const newKey = prefix ? `${prefix}.${key}` : key;
+
+        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+            Object.assign(result, flattenObject(value, newKey));
+        } else {
+            result[newKey] = value;
+        }
+    }
+    
+    return result;
+}
+
+const nestedObj = {
+    user: {
+        name: "Alice",
+        details: {
+            age: 25,
+            city: "New York"
+        }
+    }
+};
+
+console.log(flattenObject(nestedObj));
+Output:
+{
+    "user.name": "Alice",
+    "user.details.age": 25,
+    "user.details.city": "New York"
+}
+How It Works
+✅ Recursively processes nested properties
+✅ Adds parent keys as prefixes (e.g., "user.details.age" instead of details.age)
+✅ Handles any depth of nesting
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 What are Getters and Setters How Do They Work?? :Getters and setters are special methods in JavaScript that allow you to control how properties are accessed (get) and modified (set).
 They are useful when you want to add logic or validation when accessing or updating a property.
 Getter (get): A getter is used to retrieve the value of a property.
