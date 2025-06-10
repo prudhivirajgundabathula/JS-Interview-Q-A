@@ -256,6 +256,39 @@ let b = 2;
 console.log(a + b); // Output: 12 (Addition)
 In summary, unary operators take a single operand and perform a specific operation, while binary operators require two operands and perform an operation between them. 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+JSON.stringify() in JavaScript
+The JSON.stringify() method converts a JavaScript object into a JSON-formatted string. This is useful when sending data over a network, saving it in storage, or logging structured information.
+
+1. Basic Usage
+const obj = { name: "Alice", age: 25, city: "New York" };
+const jsonString = JSON.stringify(obj);
+console.log(jsonString);
+
+Output:
+{"name":"Alice","age":25,"city":"New York"}
+✅ Converts an object into a JSON string
+✅ Removes functions and undefined properties
+
+2. Handling Nested Objects
+const person = {
+    name: "Bob",
+    details: { age: 30, country: "USA" }
+};
+
+console.log(JSON.stringify(person));
+
+Output:
+{"name":"Bob","details":{"age":30,"country":"USA"}}
+✅ Preserves nested structures
+
+3. Ignoring Undefined & Functions
+const data = { name: "Charlie", age: undefined, greet: () => "Hello!" };
+console.log(JSON.stringify(data));
+
+Output:
+{"name":"Charlie"}
+✔ Undefined & functions are removed
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 A chain calculator is a calculator that supports method chaining, allowing multiple operations to be performed sequentially in a single expression. Instead of writing separate calculations, you can "chain" methods together, making the process more concise and readable.
 How It Works
 - Starts with an initial value.
