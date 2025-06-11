@@ -4767,7 +4767,61 @@ console.log(found); // Output: 30
 
 ✅ Stops immediately after finding the first match.
 ✅ Works in older browsers without native .find() support.
-----------------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+GroupBy Polyfill Loadsh: groupBy Polyfill loadsh : Lodash's _.groupBy() method groups elements in an array based on a specified key. If you want a native JavaScript alternative, you can implement a polyfill.
+
+1. Lodash _.groupBy()
+ Example 
+const _ = require("lodash");
+const data = [
+    { name: "Alice", age: 25 },
+    { name: "Bob", age: 30 },
+    { name: "Charlie", age: 25 }
+];
+
+const grouped = _.groupBy(data, "age");
+console.log(grouped);
+
+Output:
+{
+    "25": [{ "name": "Alice", "age": 25 }, { "name": "Charlie", "age": 25 }],
+    "30": [{ "name": "Bob", "age": 30 }]
+}
+
+✅ Groups objects by age
+✅ Creates an object with keys as group identifiers
+
+2: Native JavaScript Polyfill for _.groupBy()
+If you want to avoid using Lodash, you can implement your own groupBy() function using reduce(), which efficiently groups elements in an array.
+function groupBy(array, key) {
+    return array.reduce((result, item) => {
+        const group = item[key];
+        result[group] = result[group] || [];
+        result[group].push(item);
+        return result;
+    }, {});
+}
+
+// Example Usage:
+const data = [
+    { name: "Alice", age: 25 },
+    { name: "Bob", age: 30 },
+    { name: "Charlie", age: 25 }
+];
+const groupedData = groupBy(data, "age");
+console.log(groupedData);
+
+Output:
+{
+    "25": [{ "name": "Alice", "age": 25 }, { "name": "Charlie", "age": 25 }],
+    "30": [{ "name": "Bob", "age": 30 }]
+}
+
+How It Works
+✅ Uses reduce() to iterate over the array.
+✅ Creates an object with keys as group identifiers (age).
+✅ Pushes matching items into their respective groups.
+-------------------------------------------------------------------------------------------------------------------------------------------------------
 Debouncing in JavaScript
 Debouncing is a programming technique used to limit the number of times a function executes within a certain timeframe. It is especially useful in handling event listeners like keystrokes, window resizing, or API calls to optimize performance.
 
