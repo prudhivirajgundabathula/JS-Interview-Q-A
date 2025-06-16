@@ -2116,6 +2116,14 @@ const person = { name: 'Alice' };
 greet.call(person); // Outputs: Hello, my name is Alice
 ---------------------------------------------------------------------------------------------------------------------------------------
 ES6 and its concepts Var, Let and Const, Spread operator, For...of loop, JavaScript Maps oJavaScript Sets oClasses oInheritance oArrow function
+
+JS scope and scope chain : Scope determines where a variable is accessible in your program. It defines the context in which variables can be referenced or modified. JavaScript has three main types of scope:
+Function Scope: Variables declared inside a function are only accessible within that function.
+Global Scope: Variables declared outside any function are accessible throughout the program.
+Block Scope: Variables declared with let or const inside a block (e.g., loops or conditionals) are only accessible within that block.
+Scope Chain: The scope chain helps the JavaScript engine resolve variable references by searching through the current scope and its outer scopes (from local to global).
+If a variable isn't found in the current scope, the engine looks in outer scopes until it either finds the variable or reaches the global scope.
+If it cannot find the variable, it either declares it in the global scope (non-strict mode) or throws an error (strict mode).
 What are the differences between var, let and const?
 Var : var is function-scoped, meaning it's accessible within the function it’s declared in. Hoisting: Variables declared with var are hoisted to the top of their scope but are initialized with undefined until they are assigned a value. Re-declaration: 
 You can re-declare a var variable within the same scope, which can lead to unintended consequences.:
