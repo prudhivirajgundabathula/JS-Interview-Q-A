@@ -5013,6 +5013,18 @@ const debouncedFn = debounce(fn, 500, {
 });
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. ?. → Optional Chaining
+Used to safely access nested properties without throwing errors if part of the chain is null or undefined.
+const street = user?.address?.street;
+
+➡️ If user or user.address is null or undefined, it returns undefined instead of throwing TypeError.
+
+2. ?? → Nullish Coalescing Operator
+Used to provide a default value when the left-hand expression is null or undefined (but not things like 0 or false).
+const name = inputName ?? "Anonymous";
+
+➡️ If inputName is null or undefined, this assigns "Anonymous". But if it’s an empty string or false, it keeps that value.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 EventEmitter in JavaScript
 In JavaScript, EventEmitter is a pattern used to create and handle events asynchronously. It allows you to emit events and listen for them, making it useful for managing event-driven programming.
 
