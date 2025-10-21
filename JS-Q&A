@@ -880,14 +880,31 @@ Use the Set object or the filter() method.
 The Set object in JavaScript is designed to store unique values, so it automatically removes any duplicate values you might add to it.
 Set Constructor: Set is a built-in JavaScript constructor function for creating sets. When you call new Set(arr), it creates a new set object and copies the unique values from the array arr into this new set.
 new Keyword: The new keyword is necessary to construct an instance of Set. Without new, we would just be calling the Set constructor like a regular function, which won't work as intended because Set needs to initialize an instance.
-let arr = [1, 2, 2, 3];
-// Creates an array with duplicate values
-let unique = [...new Set(arr)];
-// Uses the Set constructor to create a new set with unique values from arr,
-// then converts the set back to an array using the spread operator
-let unique = [...new Set(arr)]; // [1, 2, 3]
-// Using filter() : Returns all elements that satisfy a condition.
-let filtered = arr.filter((value, index) => arr.indexOf(value) === index);
+Using Set (ES6+)
+const array = [1, 2, 2, 3, 4, 4, 5];
+const uniqueArray = [...new Set(array)];
+console.log(uniqueArray); // [1, 2, 3, 4, 5]
+- Why it works: Set is a built-in object that stores unique values.
+- Performance: Very fast for primitive types.
+🔁 Using filter + indexOf
+const array = [1, 2, 2, 3, 4, 4, 5];
+const uniqueArray = array.filter((item, index) => array.indexOf(item) === index);
+console.log(uniqueArray); // [1, 2, 3, 4, 5]
+- Why it works: Keeps the first occurrence and filters out repeats.
+- Performance: Slower for large arrays due to repeated indexOf calls.
+🧠 For Complex Objects
+If you're dealing with arrays of objects and want to remove duplicates based on a key:
+const users = [
+  { id: 1, name: 'Alice' },
+  { id: 2, name: 'Bob' },
+  { id: 1, name: 'Alice' }
+];
+const uniqueUsers = Array.from(
+  new Map(users.map(user => [user.id, user])).values()
+);
+console.log(uniqueUsers);
+// [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]
+- Why it works: Map ensures uniqueness by key (user.id here).
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 What is an Event Listener?
 An event listener is a function that waits for a specific event to occur on a particular HTML element and then executes a specified action when that event happens. Events can be user interactions like clicks, key presses, or hover actions, as well as other occurrences such as page loads or network responses.
